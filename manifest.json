@@ -1,23 +1,25 @@
 {
-    "manifest_version": 3,
-    "name": "잡코리아 이력서 갱신",
-    "version": "1.0.1",
-    "description": "잡코리아 이력서 자동 갱신 확장 프로그램",
-    "permissions": ["storage", "alarms"],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "action": {
-      "default_popup": "popup.html",
-      "default_icon": "icon.png"
-    },
-    "icons": {
+  "manifest_version": 3,
+  "name": "잡코리아 이력서 갱신",
+  "version": "1.0.2",
+  "description": "잡코리아 이력서 자동 갱신 확장 프로그램",
+  "permissions": [
+    "storage",
+    "alarms"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
     "16": "icon.png",
     "48": "icon.png",
     "128": "icon.png"
   },
-    "host_permissions": [
-      "https://xn--v69a93jfng.xn--hk3b17f.xn--3e0b707e/*"
-    ]
-  }
-  
+  "host_permissions": [
+    "https://xn--v69a93jfng.xn--hk3b17f.xn--3e0b707e/*"
+  ]
+}

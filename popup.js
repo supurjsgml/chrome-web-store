@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const idInput = document.getElementById("id");
         const pwInput = document.getElementById("password");
-
         const id = idInput.value.trim();
         const pw = pwInput.value.trim();
 
@@ -75,17 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
         hideErrorMessage();
 
         let hasError = false;
-
-        if (!id) {
-            showError(idInput, "아이디를 입력해주세요.");
-            hasError = true;
-        }
-
-        if (!pw) {
-            showError(pwInput, "비밀번호를 입력해주세요.");
-            hasError = true;
-        }
-
+        if (!id) { showError(idInput, "아이디를 입력해주세요."); hasError = true; }
+        if (!pw) { showError(pwInput, "비밀번호를 입력해주세요."); hasError = true; }
         if (hasError) return;
 
         loginAction("동기화 진행중", true);
@@ -93,40 +83,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const requestBody = { id, pw };
 
-        try {
-            const response = await fetch("https://xn--v69a93jfng.xn--hk3b17f.xn--3e0b707e/member/jobKorea/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(requestBody),
-            });
+        // [핵심 수정] fetch 대신 백그라운드에 메시지 전송
+        chrome.runtime.sendMessage({
+            action: "startSyncing",
+            requestBody
+        }, function (response) {
+            console.log("[팝업] 백그라운드 응답:", response);
 
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                showMessage("로그인에 성공하였습니다.", true); // 자동 사라짐
-
-                if (chrome.storage && chrome.storage.local) {
-                    chrome.storage.local.set({ authToken: data.data.token, requestBody }, function () {
-                        console.log("[팝업] 토큰 & 로그인 정보 저장 완료:", data.data.token);
-                    });
-
-                    // 백그라운드 스크립트에 메시지 보내기 (자동 갱신 시작)
-                    chrome.runtime.sendMessage({ action: "startSyncing", requestBody }, function (response) {
-                        console.log("[팝업] 백그라운드에 자동 갱신 요청:", response);
-                    });
-
-                    isSyncing = true;
-                    loginAction("동기화 중지", false);
-                }
+            if (response && response.status === "sync_started" && response.data.success) {
+                showMessage("로그인에 성공하였습니다.", true);
+                isSyncing = true;
+                loginAction("동기화 중지", false);
             } else {
-                showErrorMessage(data.message || "로그인 실패. 다시 시도해주세요.");
+                // 서버 오류이거나 로그인 실패인 경우
+                const errorMsg = response?.data?.message || response?.error || "로그인 실패. 다시 시도해주세요.";
+                showErrorMessage(errorMsg);
                 loginAction("로그인", false);
             }
-        } catch (error) {
-            console.error("로그인 요청 오류:", error);
-            showErrorMessage("서버 오류가 발생했습니다. 다시 시도해주세요.");
-            loginAction("로그인", false);
-        }
+        });
     });
 
     //닫기 버튼
@@ -138,9 +112,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const loginButton = document.querySelector("button[type='submit']");
         const buttonText = loginButton.querySelector(".button-text");
         const loadingSpinner = loginButton.querySelector(".loading-spinner");
-    
+
         buttonText.textContent = msg;
-    
+
         if (isLoading) {
             loginButton.disabled = true;  // 버튼 비활성화
             loginButton.classList.add("btn-loading"); // 로딩 상태 추가
@@ -151,12 +125,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function stopSyncing() {
-        chrome.storage.local.remove(["authToken", "requestBody"], function () {
-            console.log("[팝업] 저장된 토큰 삭제 및 자동 갱신 중지");
-        });
+        //스토리지에서 저장된 정보를 가져옴
+        chrome.storage.local.get(["requestBody"], function (result) {
+            const requestBody = result.requestBody;
 
-        chrome.runtime.sendMessage({ action: "stopSyncing" }, function (response) {
-            console.log("[팝업] 백그라운드에 자동 갱신 중지 요청:", response);
+            //백그라운드에 로그아웃 요청 시 데이터 전달
+            chrome.runtime.sendMessage({
+                action: "stopSyncing",
+                requestBody: requestBody // id를 포함한 전체 객체 전달
+            }, function (response) {
+                console.log("[팝업] 백그라운드에 중지 요청:", response);
+            });
+
+            //로컬 데이터 삭제
+            chrome.storage.local.remove(["authToken", "requestBody"], function () {
+                console.log("[팝업] 저장된 정보 삭제 완료");
+            });
         });
 
         isSyncing = false;
@@ -187,5 +171,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("password").addEventListener("input", function () {
         clearError(this);
+    });
+
+    //[팝업 상단] 저장된 정보로 폼 채우기
+    chrome.storage.local.get(["requestBody", "authToken"], function (result) {
+        if (result.requestBody) {
+            document.getElementById("id").value = result.requestBody.id || "";
+            document.getElementById("password").value = result.requestBody.pw || "";
+        }
+
+        if (result.authToken) {
+            isSyncing = true;
+            loginAction("동기화 중지", false);
+        } else {
+            loginAction("로그인", false);
+        }
     });
 });
