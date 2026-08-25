@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 //로그인 API 호출 함수
 async function handleLogin(requestBody) {
-    const response = await fetch("https://xn--v69a93jfng.xn--hk3b17f.xn--3e0b707e/member/jobKorea/login", {
+    const response = await fetch("https://guney-api.kro.kr/member/jobKorea/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody)
@@ -41,7 +41,7 @@ async function handleLogin(requestBody) {
 
 //로그아웃 API 호출 함수
 async function handleLogout(requestBody) {
-    const response = await fetch("https://xn--v69a93jfng.xn--hk3b17f.xn--3e0b707e/member/jobKorea/logout", {
+    const response = await fetch("https://guney-api.kro.kr/member/jobKorea/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody)

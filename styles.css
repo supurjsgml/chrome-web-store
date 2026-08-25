@@ -1,4 +1,4 @@
-/* ✅ 기본 색상 및 변수 정의 (Bootstrap 스타일 활용) */
+/* 기본 색상 및 변수 정의 (Bootstrap 스타일 활용) */
 :root {
     --bs-primary: #007bff;
     --bs-primary-text-emphasis: #0056b3;
@@ -11,7 +11,7 @@
     --bs-box-shadow-lg: 0px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ 배경 설정 */
+/* 배경 설정 */
 body {
     display: flex;
     justify-content: center;
@@ -20,14 +20,11 @@ body {
     background: rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ 팝업창 스타일 */
+/* 팝업창 스타일 */
 .login-popup {
     width: 360px;
-    max-height: 85vh; /* 기존 90vh → 85vh */
-    padding-top: 1rem;
-    padding-bottom: 4rem;
-    padding-right: 1.5rem;
-    padding-left: 1.5rem;
+    max-height: 85vh;
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
     background: var(--bs-white);
     box-shadow: var(--bs-box-shadow-lg);
     border-radius: var(--bs-border-radius-lg);
@@ -36,15 +33,15 @@ body {
     position: relative;
 }
 
-/* ✅ 제목 스타일 */
+/* 제목 스타일 */
 .login-popup h2 {
     color: var(--bs-gray-900);
     font-size: 1.8rem;
     font-weight: bold;
-    margin: 0.5rem 0 1rem 0; /* ⬅ 기존 margin-bottom 1.5rem → 1rem으로 줄임 */
+    margin: 0.5rem 0 1rem 0;
 }
 
-/* ✅ 입력 필드 및 버튼 스타일 */
+/* 입력 필드 및 버튼 스타일 */
 .form-group {
     margin-bottom: 1.2rem;
     text-align: left;
@@ -66,7 +63,7 @@ body {
     box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.3);
 }
 
-/* ✅ 버튼 스타일 */
+/* 버튼 스타일 */
 .btn-primary {
     width: 101%;
     padding: 12px;
@@ -84,7 +81,7 @@ body {
     background-color: var(--bs-primary-text-emphasis);
 }
 
-/* ✅ 구분선 스타일 */
+/* 구분선 스타일 */
 hr {
     border: 0;
     height: 1px;
@@ -92,7 +89,7 @@ hr {
     margin: 1.5rem 0;
 }
 
-/* ✅ 링크 스타일 */
+/* 링크 스타일 */
 .text-center {
     font-size: 0.9rem;
     margin-top: 1rem;
@@ -108,7 +105,7 @@ hr {
     color: var(--bs-primary-text-emphasis);
 }
 
-/* ✅ 닫기 버튼 */
+/* 닫기 버튼 */
 .close-btn {
     position: absolute;
     top: 12px;
@@ -123,31 +120,91 @@ hr {
     color: var(--bs-gray-900);
 }
 
-/* ✅ 부가 설명 컨테이너 스타일 (좌측 정렬) */
+/* 부가 설명 컨테이너 스타일 */
 .info-container {
-    background-color: #f8f9fa;
-    padding: 12px; /* 기존 15px → 12px */
-    border-radius: 6px;
-    margin-top: 8px; /* 기존 10px → 8px */
-    margin-bottom: 5px; /* ⬅ 하단 마진 추가 */
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    margin-bottom: 5px;
     text-align: left;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-/* ✅ 부가 설명 텍스트 스타일 */
-.info-text {
-    font-size: 0.85rem;
-    color: #444;
-    line-height: 1.5;
-    margin-bottom: 8px;
+.info-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.info-text strong {
-    color: #222;
-    font-weight: bold;
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: #475569;
+    line-height: 1.4;
 }
 
-/* ✅ 안내 메시지 (로그인 중, 로그인 성공) */
+.info-item span {
+    flex: 1;
+}
+
+.info-item strong {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.info-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-icon-primary {
+    color: #2563eb;
+}
+
+.info-icon-danger {
+    color: #ef4444;
+}
+
+.info-icon-info {
+    color: #0284c7;
+}
+
+.info-icon-success {
+    color: #10b981;
+}
+
+.info-icon-warning {
+    color: #d97706;
+}
+
+.info-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 10px;
+    background-color: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-radius: 6px;
+    font-size: 0.76rem;
+    color: #92400e;
+    line-height: 1.35;
+}
+
+.info-notice strong {
+    color: #78350f;
+}
+
+/* 안내 메시지 (로그인 중, 로그인 성공) */
 .message-box {
     position: absolute;
     top: 10px;
@@ -162,7 +219,7 @@ hr {
     transition: opacity 0.5s, transform 0.5s;
 }
 
-/* ✅ 로그인 버튼 아래 오류 메시지 */
+/* 로그인 버튼 아래 오류 메시지 */
 .error-message-box {
     text-align: center;
     color: red;
@@ -181,12 +238,12 @@ hr {
 }
 
 
-/* ✅ 입력 필드 오류 스타일 */
+/* 입력 필드 오류 스타일 */
 .input-error {
     border: 2px solid red;
 }
 
-/* ✅ 입력 필드 아래 오류 메시지 */
+/* 입력 필드 아래 오류 메시지 */
 .error-message {
     color: red;
     font-size: 12px;
